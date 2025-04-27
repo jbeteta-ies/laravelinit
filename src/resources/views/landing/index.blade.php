@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Página Inicial</title>
-</head>
-<body>
-    <h1>Página inicial del proyecto</h1>
-</body>
-</html>
+@extends('landing.layouts.landing')
+@section('title', 'Home Page')
+@section('header')
+    <h1>Home Page</h1>
+@section('content')
+    <p>This is the content of the home page.</p>
+@endsection
