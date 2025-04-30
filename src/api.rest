@@ -1,0 +1,57 @@
+
+
+###
+
+GET http://localhost:8080/api/notes
+
+###
+// Creamos la primer nota
+POST http://localhost:8080/api/notes HTTP/1.1
+content-type: application/json
+
+{
+    "title": "First Note",
+    "description": "This is the first note",
+    "date": "2023-10-01",
+    "done": false
+}
+###
+// creamos la segunda nota
+POST http://localhost:8080/api/notes HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Second Note",
+    "description": "This is the fisecondrst note",
+    "date": "2023-10-01",
+    "done": true
+}
+###
+//Creamos la tercera nota
+POST http://localhost:8080/api/notes HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Third Note",
+    "description": "This is the third note",
+    "date": "2023-10-01",
+    "done": false
+}
+
+### Modificamos la tercera nota
+PUT http://localhost:8080/api/notes/3 HTTP/1.1
+content-type: application/json
+
+{
+    "id": 3,
+    "title": "Third Note",
+    "description": "This is the third note",
+    "date": "2023-10-01",
+    "done": true
+}
+
+### Mostrar la nota con id 3
+GET http://localhost:8080/api/notes/3
+
+### Eliminar la nota con id 3
+DELETE http://localhost:8080/api/notes/3
