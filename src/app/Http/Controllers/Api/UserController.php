@@ -19,7 +19,7 @@ class UserController extends Controller
         // Return a JSON response with the users
         {
             return response()->json(UserResource::collection(
-                User::with('phone')->get()
+                User::with('phones')->get()
             ));
         };
     }   

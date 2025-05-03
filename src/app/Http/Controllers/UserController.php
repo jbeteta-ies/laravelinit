@@ -12,7 +12,7 @@ class UserController extends Controller
     {
         // Eager load the 'phone' relationship to avoid N+1 query problem
         // and fetch all users with their associated phone numbers
-        $users = User::with('phone')->get();
+        $users = User::with('phones')->get();
         return view('users.index', compact('users'));
     }
 

@@ -11,8 +11,13 @@
         <div>
             <h2>{{ $user->name }}</h2>
             <p>Email: {{ $user->email }}</p>
-            <p>Prefijo: {{ $user->phone->prefix ?? 'No disponible' }}</p>
-            <p>Teléfono: {{ $user->phone->number ?? 'No disponible' }}</p>
+            @forelse($user->phones as $phone)
+                <h3>Teléfono: {{ $loop->index }}   </h3>
+                <p>Teléfono: {{ $phone->number }}</p>
+                <p>Prefijo: {{ $phone->prefix }}</p>
+            @empty
+                <p>No hay teléfonos disponibles.</p>
+            @endforelse
         </div>
     @empty
         <p>No hay usuarios disponibles.</p>

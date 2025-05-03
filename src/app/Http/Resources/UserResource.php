@@ -17,10 +17,12 @@ class UserResource extends JsonResource
         return [
             'name' => $this->name,
             'email' => $this->email,
-            'telefono' => [
-                'prefix' => $this->phone->prefix ?? null,
-                'number' => $this->phone->number ?? null,
-            ]
+            'phones' => $this->phones->map(function ($phone) {
+                return [
+                    'prefix' => $phone->prefix,
+                    'number' => $phone->number
+                ];
+            }),
         ];
     }
 }
