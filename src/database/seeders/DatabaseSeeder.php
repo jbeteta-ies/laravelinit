@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             UserSeeder::class,
+            SIMCardSeeder::class,
             PhoneSeeder::class,
         ]);
     }

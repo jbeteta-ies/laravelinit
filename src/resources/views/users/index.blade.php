@@ -13,6 +13,7 @@
             <p>Email: {{ $user->email }}</p>
             <p>Prefijo: {{ $user->phone->prefix ?? 'No disponible' }}</p>
             <p>Teléfono: {{ $user->phone->number ?? 'No disponible' }}</p>
+            <p>Tarjeta SIM: {{ $user->simCard->serial_number  ?? 'No disponible' }}</p>
         </div>
     @empty
         <p>No hay usuarios disponibles.</p>

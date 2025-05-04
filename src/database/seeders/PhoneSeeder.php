@@ -17,18 +17,21 @@ class PhoneSeeder extends Seeder
             'prefix' => '34',
             'number' => '1234567890',
             'user_id' => 1,
+            'sim_card_id' => 1,
         ]);
 
         Phone::create([
             'prefix' => '34',
             'number' => '0987654321',
             'user_id' => 2,
+            'sim_card_id' => 2,
         ]);
 
         Phone::create([
             'prefix' => '34',
             'number' => '1122334455',
             'user_id' => 3,
+            'sim_card_id' => 3,
         ]);
-    }
+    }   
 }

@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('phones', function (Blueprint $table) {
+        Schema::create('s_i_m_cards', function (Blueprint $table) {
             $table->id();
-            $table->integer('prefix')->default(34);
-            $table->unsignedBigInteger('number')->unique();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('serial_number')->unique();
+            $table->string('provider');
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('phones');
+        Schema::dropIfExists('s_i_m_cards');
     }
 };
