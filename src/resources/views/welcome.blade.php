@@ -1,4 +1,4 @@
 @extends('layouts.index')
 @section('content')
-    <livewire:hello-world />
+    <livewire:contador/>
 @endsection
