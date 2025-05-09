@@ -3,6 +3,8 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\WithPagination;
+use Illuminate\Support\Facades\Log;
 
 class Contador extends Component
 {
@@ -27,4 +29,6 @@ class Contador extends Component
     {
         return view('livewire.contador');
     }
+
+  
 }
