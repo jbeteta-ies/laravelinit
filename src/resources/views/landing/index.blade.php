@@ -8,5 +8,6 @@
 </head>
 <body>
     <h1>Página inicial del proyecto</h1>
+    <a href={{ route('files.index') }}>files</a>
 </body>
 </html>
