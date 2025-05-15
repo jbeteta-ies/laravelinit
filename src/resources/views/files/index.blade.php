@@ -7,7 +7,8 @@
             <li>
                 <p>{{ $file->name }} - {{ $file->description }}</p>
                 <p>Localización: {{ $file->url }}</p>
-                <img src="{{ asset('files/'.$file->url)}}" alt="{{ $file->name }}" width="100" />
+                <!-- <img src="{{ asset('files/'.$file->url)}}" alt="{{ $file->name }}" width="100" /> -->
+                <img src="{{ asset('storage/files/'.$file->url)}}" alt="{{ $file->name }}" width="100" /> 
             </li>
         @empty
             <li>

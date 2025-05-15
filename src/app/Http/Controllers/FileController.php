@@ -24,7 +24,8 @@ class FileController extends Controller
     {
         $file = $request->file('file');
         $fileName = time() . '_' . uniqId() .  '.' . $file->getClientOriginalExtension();
-        $file->move(public_path('files'), $fileName);
+        //$file->move(public_path('files'), $fileName);
+        $file->storeAs('files', $fileName);
 
         File::create([
             'name' => $request->file('file')->getClientOriginalName(),
