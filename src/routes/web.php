@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
 
-Route::view('/', 'landing.index')->name('landing.index');
+Route::get('/', [ProductController::class, 'index'])->name('products.index');
 
 
