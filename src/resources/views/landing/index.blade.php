@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Página Inicial</title>
-</head>
-<body>
-    <h1>Página inicial del proyecto</h1>
-</body>
-</html>
+@extends('_layouts.app')
+@section('title', __('landing.title'))
+
+@section('content')
+    <h1>{{ __('landing.title') }}</h1>
+    <p>{{ __('landing.description') }}</p>
+    <a href="{{ route('contact') }}">{{ __('landing.button_contact') }}</a>
+@endsection

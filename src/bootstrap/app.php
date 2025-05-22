@@ -11,7 +11,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Aquí agregas el middleware LocaleMiddleware
+        $middleware->group('web', [
+            // Mantener el middleware que inicia la sesión primero:
+            \Illuminate\Session\Middleware\StartSession::class,
+            // Aquí agregas el middleware LocaleMiddleware
+            \App\Http\Middleware\LocaleMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
