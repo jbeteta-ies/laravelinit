@@ -33,4 +33,12 @@ class NavComponent extends Component
             'busqueda' => $this->busqueda,
         ]);
     }
+
+    public function updated($propertyName)
+    {
+        // Llamar al método de filtrado cuando la propiedad busqueda cambie
+        if ($propertyName === 'busqueda') {
+            dd($this->busqueda);
+        }
+    }
 }
