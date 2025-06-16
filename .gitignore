@@ -3,6 +3,10 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
+# MySQL data and temp files
+mysql/data/*
+mysql/tmp/*
+
 # Laravel 4 specific
 bootstrap/compiled.php
 app/storage/
