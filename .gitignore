@@ -3,6 +3,10 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
+# MySQL data a temporarily stored in the project
+mysql/data/*
+mysql/tmp/*
+
 # Laravel 4 specific
 bootstrap/compiled.php
 app/storage/
@@ -28,3 +32,5 @@ Homestead.json
 .env.production
 .phpactor.json
 auth.json
+
+update_branches.sh
