@@ -33,4 +33,6 @@ Homestead.json
 .phpactor.json
 auth.json
 
-**/DS_Store
+.DS_Store
+.AppleDouble
+.LSOverride
