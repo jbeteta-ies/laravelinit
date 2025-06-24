@@ -4,8 +4,8 @@ npm-debug.log
 yarn-error.log
 
 # MySQL data and temp files
-mysql/data/*
-mysql/tmp/*
+#mysql/data/*
+#mysql/tmp/*
 
 # Laravel 4 specific
 bootstrap/compiled.php
@@ -32,3 +32,5 @@ Homestead.json
 .env.production
 .phpactor.json
 auth.json
+
+**/DS_Store
