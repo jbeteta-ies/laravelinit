@@ -34,3 +34,4 @@ Homestead.json
 auth.json
 
 update_branches.sh
+**/.DS_Store
