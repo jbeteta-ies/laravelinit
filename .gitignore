@@ -6,6 +6,9 @@ yarn-error.log
 # MySQL data a temporarily stored in the project
 mysql/data/*
 mysql/tmp/*
+!mysql/data/data.md
+!mysql/tmp/tmp.md
+
 
 # Laravel 4 specific
 bootstrap/compiled.php
@@ -33,4 +36,4 @@ Homestead.json
 .phpactor.json
 auth.json
 
-update_branches.sh
+**/DS_Store
