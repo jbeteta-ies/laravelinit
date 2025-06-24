@@ -1,0 +1,1 @@
+Fichero creado para obligar a Git a trackear el directorio tmp
