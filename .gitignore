@@ -36,4 +36,4 @@ Homestead.json
 .phpactor.json
 auth.json
 
-update_branches.sh
+**/DS_Store
