@@ -12,7 +12,7 @@ services:
       - MYSQL_USER=alumno
       - MYSQL_PASSWORD=alumno
       - MYSQL_DB=test
-      - MONGODB_HOST=host.docker.internal
+      - MONGODB_HOST=mysql
       - MONGODB_USER=alumno
       - MONGODB_PASSWORD=alumno
       - MONGODB_DB=test
