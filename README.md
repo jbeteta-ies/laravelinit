@@ -1,121 +1,308 @@
-# 📖 Proyecto de Entorno de Desarrollo para Laravel
 
-Este repositorio contiene el entorno base necesario para desarrollar proyectos Laravel utilizando Docker y Visual Studio Code.
+# LaravelInit – Entorno Docker para Desarrollo Web (DAW / ASIR)
 
-## 📚 Contenido del proyecto
+Este repositorio proporciona un **entorno de desarrollo con Docker** preparado para trabajar con:
 
-- Contenedor Docker para PHP 8.4-FPM con Composer y Xdebug.
-- Contenedor Docker para Nginx configurado para Laravel.
-- Estructura de carpetas preparada (`src/`, `php/`, `nginx/`, `.vscode/`).
-- Configuración de depuración paso a paso en VSCode.
-- Instrucciones detalladas para la instalación y puesta en marcha.
+* PHP (PHP-FPM)
+* Nginx
+* MySQL
+* Xdebug (depuración desde VSCode)
+
+Está pensado para **uso docente**, de forma que:
+
+* funcione igual en **Windows, Linux y macOS**
+* no haya problemas de permisos
+* los alumnos puedan empezar a programar y depurar desde el primer día
 
 ---
 
-## 🚀 Cómo empezar
+## Requisitos previos
 
-### 1. Clonar el repositorio
+Antes de empezar, asegúrate de tener instalado:
+
+* **Docker**
+* **Docker Compose**
+* **Visual Studio Code**
+* Extensión de VSCode: **PHP Debug**
+
+No es necesario instalar PHP ni MySQL en el sistema anfitrión.
+
+---
+
+## Estructura del proyecto
+
+```
+laravelinit/
+├── docker/
+│   ├── nginx/
+│   │   └── default.conf
+│   ├── php/
+│   │   ├── Dockerfile
+│   │   ├── entrypoint.sh
+│   │   └── xdebug.ini
+│   └── mysql/
+│       └── init/
+│           └── 01-grants.sql
+├── src/
+│   └── public/
+│       └── index.php
+├── scripts/
+├── docker-compose.yml
+└── README.md
+```
+
+---
+
+## Servicios Docker
+
+El entorno levanta **tres servicios**:
+
+| Servicio | Descripción      |
+| -------- | ---------------- |
+| `php`    | PHP-FPM + Xdebug |
+| `nginx`  | Servidor web     |
+| `mysql`  | Base de datos    |
+
+Los nombres de los servicios son **importantes**, ya que se usan para:
+
+* conexiones internas
+* acceder a los contenedores (`docker compose exec`)
+
+---
+
+## Puertos utilizados
+
+| Servicio | Puerto                  |
+| -------- | ----------------------- |
+| Nginx    | `http://localhost:8080` |
+| MySQL    | `localhost:3307`        |
+| Xdebug   | `9003`                  |
+
+---
+
+## Credenciales de MySQL
+
+* **Usuario root**
+
+  * usuario: `root`
+  * contraseña: `administrador`
+
+* **Usuario alumno**
+
+  * usuario: `alumno`
+  * contraseña: `alumno`
+  * base de datos inicial: `test`
+  * permisos: **administrador global** (puede crear bases de datos)
+
+---
+
+## Puesta en marcha del entorno
+
+### 1️⃣ Clonar el repositorio
 
 ```bash
 git clone https://github.com/jbeteta-ies/laravelinit.git
 cd laravelinit
 ```
 
-### 2. Cambiar a la rama inicial de trabajo
+---
+
+### 2️⃣ Levantar el entorno (primera vez o reinicio completo)
 
 ```bash
-git checkout 5.3-inicio
+docker compose down -v
+docker compose up -d --build
 ```
 
-Esta rama contiene la base preparada para instalar Laravel.
+> ⚠️ El comando `down -v` elimina la base de datos y la vuelve a crear desde cero.
+> Es el comando recomendado cuando algo no funciona.
 
 ---
 
-### 3. Levantar el entorno Docker
+### 3️⃣ Acceder desde el navegador
 
-Construir y levantar los contenedores:
+Abre:
+
+```
+http://localhost:8080
+```
+
+Deberías ver una página con **“Hola mundo”** y la información de PHP (`phpinfo()`).
+
+---
+
+## Acceso a los contenedores (muy importante)
+
+### Entrar al contenedor PHP
 
 ```bash
-docker-compose build
-docker-compose up -d
+docker compose exec php bash
 ```
 
-### 4. Entrar en el contenedor PHP
+### Entrar a MySQL como alumno
 
 ```bash
-docker exec -it docker_php bash
+docker compose exec mysql mysql -ualumno -palumno
 ```
 
-### 5. Instalar Laravel en la carpeta `src/`
-
-Dentro del contenedor, ejecutar:
+### Entrar a MySQL como root
 
 ```bash
-composer create-project laravel/laravel .
+docker compose exec mysql mysql -uroot -padministrador
 ```
 
 ---
 
-### 6. Configurar Nginx
+## Depuración con Xdebug (VSCode)
 
-Modificar el archivo `nginx/default.conf` para que el `root` apunte a:
+### 1️⃣ Configuración de VSCode
 
-```nginx
-root /var/www/html/public;
+Crea el archivo:
+
+```
+.vscode/launch.json
 ```
 
-Reiniciar los contenedores:
+Con este contenido:
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Listen for Xdebug",
+      "type": "php",
+      "request": "launch",
+      "port": 9003,
+      "pathMappings": {
+        "/var/www": "${workspaceFolder}/src"
+      }
+    }
+  ]
+}
+```
+
+---
+
+### 2️⃣ Probar la depuración
+
+1. Abre `src/public/index.php`
+2. Pon un **breakpoint** en una línea PHP
+3. En VSCode: **Run and Debug → Listen for Xdebug**
+4. Recarga `http://localhost:8080`
+
+✔️ El programa debe detenerse en el breakpoint.
+
+Xdebug está **siempre activo** en este entorno (no hay que activar nada).
+
+---
+
+## Carpeta scripts (copias de seguridad)
+
+La carpeta `scripts/` se utiliza para intercambiar archivos `.sql` con MySQL.
+
+### Importar una base de datos
 
 ```bash
-docker-compose down
-docker-compose up -d
+docker compose exec mysql mysql -uroot -padministrador test < /scripts/backup.sql
+```
+
+### Exportar una base de datos
+
+```bash
+docker compose exec mysql mysqldump -uroot -padministrador test > /scripts/backup.sql
 ```
 
 ---
 
-## 📢 Notas importantes
+## Comprobaciones finales (OBLIGATORIAS)
 
-- Asegúrate de tener instalados **Docker Desktop** y **Visual Studio Code** con la extensión **PHP Debug Adapter**.
-- Se recomienda trabajar en cada rama específica del curso (`5.3-inicio`, `5.3-fin`, etc.).
-- Sigue el material del curso para avanzar en los temas prácticos.
+Antes de empezar a trabajar, **todos los alumnos deben comprobar**:
+
+### ✔️ 1. El entorno levanta
+
+```bash
+docker compose ps
+```
+
+### ✔️ 2. La web funciona
+
+* `http://localhost:8080` carga correctamente
+
+### ✔️ 3. Se puede entrar a los contenedores
+
+```bash
+docker compose exec php bash
+docker compose exec mysql mysql -ualumno -palumno
+```
+
+### ✔️ 4. Permisos correctos (especialmente en Linux)
+
+Desde el host:
+
+```bash
+touch src/prueba.txt
+rm src/prueba.txt
+```
+
+Desde el contenedor:
+
+```bash
+docker compose exec php touch /var/www/prueba2.txt
+```
+
+### ✔️ 5. Xdebug funciona
+
+* VSCode escuchando
+* Breakpoint activo
+* La ejecución se detiene
 
 ---
 
-# 🛠️ Estructura del proyecto
+## Problemas frecuentes
 
-```plaintext
-/ (raíz del proyecto)
-├── docker-compose.yml
-├── README.md
-├── php/
-│   ├── Dockerfile
-│   └── conf.d/
-│       └── 99-xdebug.ini
-├── nginx/
-│   └── default.conf
-├── src/
-│   └── (Proyecto Laravel)
-├── .vscode/
-│   └── launch.json
+### ❌ MySQL no aplica cambios de usuario o contraseña
+
+Solución:
+
+```bash
+docker compose down -v
+docker compose up -d --build
+```
+
+### ❌ Xdebug no se conecta
+
+* Comprueba que VSCode está escuchando
+* Comprueba que el puerto es `9003`
+* Comprueba el `pathMappings`
+
+---
+
+## Objetivo del entorno
+
+Este entorno está diseñado para:
+
+* evitar diferencias entre sistemas operativos
+* reducir errores de configuración
+* centrarse en **programar, depurar y aprender bases de datos**
+
+---
+
+Si necesitas reiniciar todo, recuerda:
+
+```bash
+docker compose down -v
+docker compose up -d --build
 ```
 
 ---
 
-## 📚 Recursos adicionales
-
-- [Documentación oficial de Laravel](https://laravel.com/docs)
-- [Documentación de Docker](https://docs.docker.com/)
-- [Guía de VSCode Debugging PHP](https://code.visualstudio.com/docs/editor/debugging)
+**Fin del README**
 
 ---
 
-# 🚀 ¡Listo para desarrollar aplicaciones modernas con Laravel!
+Cuando quieras, en el siguiente paso puedo:
 
----
-
-# 🎯 ¿Te gusta esta propuesta de README?
-
-¿Quieres que también te prepare una versión pensada para alumnos, más \"amigable\" todavía, o prefieres un README más \"profesional/empresa\" como el que acabo de pasar? 🚀✨  
-(¡Te puedo preparar los dos si quieres!) 
-
-¿Seguimos? 🎯📚
+* adaptarlo exactamente al formato MkDocs
+* reducirlo a una versión “entregable para alumnos”
+* o preparar una hoja de incidencias rápidas para clase
