@@ -103,6 +103,7 @@ Los nombres de los servicios son **importantes**, ya que se usan para:
 ```bash
 git clone https://github.com/jbeteta-ies/laravelinit.git
 cd laravelinit
+git checkout version.2
 ```
 
 ---
