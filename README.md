@@ -1,31 +1,119 @@
+# LaravelInit – Entorno Docker para Desarrollo Web
 
-# LaravelInit – Entorno Docker para Desarrollo Web (DAW / ASIR)
-
-Este repositorio proporciona un **entorno de desarrollo con Docker** preparado para trabajar con:
+Este proyecto proporciona un **entorno de desarrollo web con Docker** preparado para trabajar durante todo el curso con:
 
 * PHP (PHP-FPM)
 * Nginx
 * MySQL
-* Xdebug (depuración desde VSCode)
+* Xdebug (depuración con Visual Studio Code)
 
-Está pensado para **uso docente**, de forma que:
+El objetivo principal es que **todos los alumnos trabajen con el mismo entorno**, independientemente de su sistema operativo (Windows, Linux o macOS), y que comprendan cómo se construye y utiliza.
 
-* funcione igual en **Windows, Linux y macOS**
-* no haya problemas de permisos
-* los alumnos puedan empezar a programar y depurar desde el primer día
+---
+
+## ⚠️ Aviso importante (lectura obligatoria)
+
+Este repositorio **NO es el punto de partida del aprendizaje**.
+
+Durante el curso:
+
+* El alumnado **debe crear el entorno paso a paso**, siguiendo los apuntes.
+* **No se empieza clonando este repositorio**.
+
+Este repositorio se proporciona **solo como apoyo** en los siguientes casos:
+
+* Si el entorno no funciona tras seguir todos los pasos.
+* Si se quiere crear rápidamente un entorno funcional para continuar el curso.
+* Como referencia completa del entorno final.
+
+---
+
+## Rama obligatoria del proyecto
+
+El entorno válido para el curso se encuentra en la rama:
+
+```
+version.2
+```
+
+La rama `main` **no está preparada** y puede contener configuraciones incompletas.
+
+Si utilizas este repositorio, **asegúrate siempre de estar en la rama correcta**:
+
+```bash
+git checkout version.2
+git branch
+```
+
+Debe aparecer:
+
+```
+* version.2
+```
 
 ---
 
 ## Requisitos previos
 
-Antes de empezar, asegúrate de tener instalado:
+Antes de utilizar este proyecto debes tener instalado:
 
-* **Docker**
-* **Docker Compose**
+* **Docker Desktop**
+
+  * Windows / macOS: [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+  * Linux: [https://docs.docker.com/engine/install/](https://docs.docker.com/engine/install/)
 * **Visual Studio Code**
-* Extensión de VSCode: **PHP Debug**
+
+  * [https://code.visualstudio.com/](https://code.visualstudio.com/)
+* Extensión de VSCode:
+
+  * **PHP Debug** (autor: Xdebug)
 
 No es necesario instalar PHP ni MySQL en el sistema anfitrión.
+
+---
+
+## Servicios Docker
+
+El entorno se compone de **tres servicios**, cuyos nombres son fijos:
+
+| Servicio | Descripción        |
+| -------- | ------------------ |
+| `php`    | PHP-FPM con Xdebug |
+| `nginx`  | Servidor web       |
+| `mysql`  | Base de datos      |
+
+Estos nombres se utilizan para:
+
+* Conexiones internas entre contenedores
+* Acceso mediante `docker compose exec`
+
+---
+
+## Puertos utilizados
+
+| Servicio | Puerto                                         |
+| -------- | ---------------------------------------------- |
+| Nginx    | [http://localhost:8080](http://localhost:8080) |
+| MySQL    | localhost:3307                                 |
+| Xdebug   | 9003                                           |
+
+---
+
+## Credenciales de MySQL
+
+* **Usuario root**
+
+  * Usuario: `root`
+  * Contraseña: `administrador`
+
+* **Usuario alumno**
+
+  * Usuario: `alumno`
+  * Contraseña: `alumno`
+  * Base de datos inicial: `test`
+  * Permisos: **administrador global** (puede crear bases de datos)
+
+⚠️ Estos permisos **no son adecuados para producción**, pero son correctos para un entorno educativo.
 
 ---
 
@@ -38,7 +126,6 @@ laravelinit/
 │   │   └── default.conf
 │   ├── php/
 │   │   ├── Dockerfile
-│   │   ├── entrypoint.sh
 │   │   └── xdebug.ini
 │   └── mysql/
 │       └── init/
@@ -53,50 +140,9 @@ laravelinit/
 
 ---
 
-## Servicios Docker
+## Puesta en marcha rápida (uso del repositorio como apoyo)
 
-El entorno levanta **tres servicios**:
-
-| Servicio | Descripción      |
-| -------- | ---------------- |
-| `php`    | PHP-FPM + Xdebug |
-| `nginx`  | Servidor web     |
-| `mysql`  | Base de datos    |
-
-Los nombres de los servicios son **importantes**, ya que se usan para:
-
-* conexiones internas
-* acceder a los contenedores (`docker compose exec`)
-
----
-
-## Puertos utilizados
-
-| Servicio | Puerto                  |
-| -------- | ----------------------- |
-| Nginx    | `http://localhost:8080` |
-| MySQL    | `localhost:3307`        |
-| Xdebug   | `9003`                  |
-
----
-
-## Credenciales de MySQL
-
-* **Usuario root**
-
-  * usuario: `root`
-  * contraseña: `administrador`
-
-* **Usuario alumno**
-
-  * usuario: `alumno`
-  * contraseña: `alumno`
-  * base de datos inicial: `test`
-  * permisos: **administrador global** (puede crear bases de datos)
-
----
-
-## Puesta en marcha del entorno
+⚠️ **Solo usar este apartado si ya has seguido los apuntes o necesitas un entorno funcional inmediato**.
 
 ### 1️⃣ Clonar el repositorio
 
@@ -108,45 +154,48 @@ git checkout version.2
 
 ---
 
-### 2️⃣ Levantar el entorno (primera vez o reinicio completo)
+### 2️⃣ Arranque limpio del entorno
 
 ```bash
 docker compose down -v
 docker compose up -d --build
 ```
 
-> ⚠️ El comando `down -v` elimina la base de datos y la vuelve a crear desde cero.
-> Es el comando recomendado cuando algo no funciona.
+Este comando:
+
+* Elimina contenedores y volúmenes
+* Reconstruye las imágenes
+* Inicializa MySQL desde cero
 
 ---
 
-### 3️⃣ Acceder desde el navegador
+### 3️⃣ Acceso a la aplicación
 
-Abre:
+Abre en el navegador:
 
 ```
 http://localhost:8080
 ```
 
-Deberías ver una página con **“Hola mundo”** y la información de PHP (`phpinfo()`).
+Debe mostrarse una página con información de PHP (`phpinfo()`).
 
 ---
 
-## Acceso a los contenedores (muy importante)
+## Acceso a los contenedores
 
-### Entrar al contenedor PHP
+### Contenedor PHP
 
 ```bash
 docker compose exec php bash
 ```
 
-### Entrar a MySQL como alumno
+### Contenedor MySQL (usuario alumno)
 
 ```bash
 docker compose exec mysql mysql -ualumno -palumno
 ```
 
-### Entrar a MySQL como root
+### Contenedor MySQL (root)
 
 ```bash
 docker compose exec mysql mysql -uroot -padministrador
@@ -154,51 +203,7 @@ docker compose exec mysql mysql -uroot -padministrador
 
 ---
 
-## Depuración con Xdebug (VSCode)
-
-### 1️⃣ Configuración de VSCode
-
-Crea el archivo:
-
-```
-.vscode/launch.json
-```
-
-Con este contenido:
-
-```json
-{
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Listen for Xdebug",
-      "type": "php",
-      "request": "launch",
-      "port": 9003,
-      "pathMappings": {
-        "/var/www": "${workspaceFolder}/src"
-      }
-    }
-  ]
-}
-```
-
----
-
-### 2️⃣ Probar la depuración
-
-1. Abre `src/public/index.php`
-2. Pon un **breakpoint** en una línea PHP
-3. En VSCode: **Run and Debug → Listen for Xdebug**
-4. Recarga `http://localhost:8080`
-
-✔️ El programa debe detenerse en el breakpoint.
-
-Xdebug está **siempre activo** en este entorno (no hay que activar nada).
-
----
-
-## Carpeta scripts (copias de seguridad)
+## Carpeta scripts
 
 La carpeta `scripts/` se utiliza para intercambiar archivos `.sql` con MySQL.
 
@@ -216,94 +221,46 @@ docker compose exec mysql mysqldump -uroot -padministrador test > /scripts/backu
 
 ---
 
-## Comprobaciones finales (OBLIGATORIAS)
+## Depuración con Xdebug
 
-Antes de empezar a trabajar, **todos los alumnos deben comprobar**:
+Xdebug está **siempre activo** en este entorno.
 
-### ✔️ 1. El entorno levanta
+Para depurar:
 
-```bash
-docker compose ps
-```
-
-### ✔️ 2. La web funciona
-
-* `http://localhost:8080` carga correctamente
-
-### ✔️ 3. Se puede entrar a los contenedores
-
-```bash
-docker compose exec php bash
-docker compose exec mysql mysql -ualumno -palumno
-```
-
-### ✔️ 4. Permisos correctos (especialmente en Linux)
-
-Desde el host:
-
-```bash
-touch src/prueba.txt
-rm src/prueba.txt
-```
-
-Desde el contenedor:
-
-```bash
-docker compose exec php touch /var/www/prueba2.txt
-```
-
-### ✔️ 5. Xdebug funciona
-
-* VSCode escuchando
-* Breakpoint activo
-* La ejecución se detiene
+1. Configura el archivo `.vscode/launch.json` (según los apuntes).
+2. Inicia la depuración en VSCode (**Listen for Xdebug**).
+3. Accede a `http://localhost:8080`.
+4. El breakpoint debe detener la ejecución.
 
 ---
 
-## Problemas frecuentes
+## Comprobaciones finales
 
-### ❌ MySQL no aplica cambios de usuario o contraseña
+Antes de dar el entorno por válido, comprueba:
 
-Solución:
+* `docker compose ps` muestra los tres servicios activos
+* La web carga en `http://localhost:8080`
+* Puedes entrar a los contenedores `php` y `mysql`
+* El usuario `alumno` puede crear bases de datos
+* Un breakpoint en PHP funciona correctamente
+
+---
+
+## Reinicio completo del entorno
+
+Si algo no funciona correctamente:
 
 ```bash
 docker compose down -v
 docker compose up -d --build
 ```
 
-### ❌ Xdebug no se conecta
-
-* Comprueba que VSCode está escuchando
-* Comprueba que el puerto es `9003`
-* Comprueba el `pathMappings`
+Este comando resuelve la mayoría de problemas.
 
 ---
 
-## Objetivo del entorno
+## Conclusión
 
-Este entorno está diseñado para:
+Este repositorio representa **el entorno final del curso**.
 
-* evitar diferencias entre sistemas operativos
-* reducir errores de configuración
-* centrarse en **programar, depurar y aprender bases de datos**
-
----
-
-Si necesitas reiniciar todo, recuerda:
-
-```bash
-docker compose down -v
-docker compose up -d --build
-```
-
----
-
-**Fin del README**
-
----
-
-Cuando quieras, en el siguiente paso puedo:
-
-* adaptarlo exactamente al formato MkDocs
-* reducirlo a una versión “entregable para alumnos”
-* o preparar una hoja de incidencias rápidas para clase
+El objetivo principal no es usarlo directamente, sino **comprender cómo se ha construido** para poder trabajar con frameworks como Laravel en un entorno profesional, reproducible y estable.
