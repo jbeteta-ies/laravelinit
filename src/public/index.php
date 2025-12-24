@@ -6,7 +6,7 @@
     <title>Hello World!</title>
 </head>
 <body>
-    <h1>¡Hola, mundo!</h1>
+    <h1>¡Hola, mundo V2!</h1>
     <?= phpinfo(); ?>
 </body>
 </html>
