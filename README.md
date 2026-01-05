@@ -28,30 +28,6 @@ Este repositorio se proporciona **solo como apoyo** en los siguientes casos:
 
 ---
 
-## Rama obligatoria del proyecto
-
-El entorno válido para el curso se encuentra en la rama:
-
-```
-version.2
-```
-
-La rama `main` **no está preparada** y puede contener configuraciones incompletas.
-
-Si utilizas este repositorio, **asegúrate siempre de estar en la rama correcta**:
-
-```bash
-git checkout version.2
-git branch
-```
-
-Debe aparecer:
-
-```
-* version.2
-```
-
----
 
 ## Requisitos previos
 
