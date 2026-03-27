@@ -18,12 +18,12 @@ services:
       MYSQL_DB: test
 
       # Variables estándar Laravel (por si las necesitas)
-      DB_CONNECTION: mysql
-      DB_HOST: mysql
-      DB_PORT: 3306
-      DB_DATABASE: test
-      DB_USERNAME: alumno
-      DB_PASSWORD: alumno
+      #DB_CONNECTION: mysql
+      #DB_HOST: mysql
+      #DB_PORT: 3306
+      #DB_DATABASE: test
+      #DB_USERNAME: alumno
+      #DB_PASSWORD: alumno
     extra_hosts:
       - "host.docker.internal:host-gateway"
     user: "${UID:-1000}:${GID:-1000}"
