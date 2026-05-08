@@ -322,7 +322,7 @@ Deberías ver la **página de bienvenida de Laravel 12**. Si todo está configur
 
 ---
 
-Con estos pasos, **Laravel 12** debería instalarse correctamente en tu entorno Docker.
+Con estos pasos, **Laravel 12** debería instalarse correctamente en tu entorno Docker.x 
 
 ## Conclusión
 

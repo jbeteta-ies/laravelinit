@@ -7,7 +7,7 @@ services:
     working_dir: /var/www/html
     volumes:
       - ./src:/var/www/html
-      - ./scripts:/scripts
+      - ./docker/scripts:/scripts
     environment:
       # Xdebug apagado por defecto; se activa con XDEBUG_MODE=debug
       XDEBUG_CONFIG: "client_host=host.docker.internal client_port=9003"
@@ -53,7 +53,7 @@ services:
       - "3306:3306"
     volumes:
       - dbdata:/var/lib/mysql
-      - ./scripts:/scripts
+      - ./docker/scripts:/scripts
       - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
     tmpfs:
       - /tmp
