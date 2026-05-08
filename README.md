@@ -125,7 +125,6 @@ laravelinit/
 ```bash
 git clone https://github.com/jbeteta-ies/laravelinit.git
 cd laravelinit
-git checkout version.2
 ```
 
 ---
@@ -231,9 +230,99 @@ docker compose down -v
 docker compose up -d --build
 ```
 
-Este comando resuelve la mayoría de problemas.
+## Instalación de Laravel 12 a partir de la rama `entorno-inicial`
+
+Para instalar **Laravel 12** en este entorno Docker, sigue estos pasos:
+
+### 1️⃣ Cambiar a la rama `entorno-inicial`
+
+Primero, asegúrate de estar en la rama `entorno-inicial` para garantizar que el entorno esté configurado correctamente antes de instalar Laravel.
+
+```bash
+git fetch --all
+git checkout entorno-inicial
+```
+
+### 2️⃣ Modificar la configuración de Nginx
+
+Abre el archivo de configuración de **Nginx** (`docker/nginx/default.conf`) y cambia el siguiente bloque de configuración:
+
+```nginx
+root /var/www/html/public;
+index index.php index.html index.htm;
+
+location / {
+    try_files $uri $uri/ /index.php?$query_string;
+}
+
+location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_pass php:9000;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+```
+
+Esto asegura que **Nginx sirva correctamente Laravel** desde el directorio `public`.
+
+### 3️⃣ Arrancar los contenedores con Docker Compose
+
+Una vez configurado Nginx, levanta los contenedores con Docker Compose:
+
+```bash
+docker compose up -d 
+```
+
+Este comando construye los contenedores y los levanta en segundo plano.
+
+### 4️⃣ Vaciar la carpeta `src`
+
+A continuación, **vacía la carpeta `src/`** (la carpeta donde se instalará Laravel) para asegurarte de que no hay archivos previos:
+
+```bash
+rm -rf src/*
+```
+
+Este comando elimina todos los archivos dentro de `src/` (pero **no elimina la carpeta**).
+
+### 5️⃣ Entrar al contenedor PHP
+
+Ahora, accede al contenedor **PHP** para ejecutar los comandos de Composer dentro del contenedor:
+
+```bash
+docker compose exec php bash
+```
+
+### 6️⃣ Instalar Laravel con Composer
+
+Dentro del contenedor PHP, ejecuta el siguiente comando para instalar Laravel 12 en la carpeta `src/`:
+
+```bash
+composer create-project laravel/laravel:^12.0 .
+```
+
+Este comando descargará y instalará **Laravel 12** en el directorio `src/` del proyecto.
+
+### 7️⃣ Reiniciar Docker para que el `entrypoint.sh` actúe
+
+Después de que Laravel se haya instalado, es posible que debas reiniciar los contenedores para que el **`entrypoint.sh`** se ejecute y configure las carpetas necesarias como `storage` y `bootstrap/cache`:
+
+```bash
+docker compose down
+docker compose up -d 
+```
+
+### 8️⃣ Verificar en el navegador
+
+Verificar que la base de dotos (sqlite aún no hemos cambiado a mysql) se ha creado correctamente y contiene las migraciones de Laravel:
+
+Finalmente, accede a **[http://localhost:8080](http://localhost:8080)** en tu navegador.
+
+Deberías ver la **página de bienvenida de Laravel 12**. Si todo está configurado correctamente, el entorno de Laravel debería cargarse sin problemas.
 
 ---
+
+Con estos pasos, **Laravel 12** debería instalarse correctamente en tu entorno Docker.
 
 ## Conclusión
 
