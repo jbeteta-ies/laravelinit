@@ -4,9 +4,9 @@ services:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
-    working_dir: /var/www
+    working_dir: /var/www/html
     volumes:
-      - ./src:/var/www
+      - ./src:/var/www/html
       - ./scripts:/scripts
     environment:
       # Xdebug apagado por defecto; se activa con XDEBUG_MODE=debug
@@ -38,7 +38,7 @@ services:
     depends_on:
       - php
     volumes:
-      - ./src:/var/www:ro
+      - ./src:/var/www/html:ro
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
 
   mysql:
@@ -50,7 +50,7 @@ services:
       MYSQL_PASSWORD: alumno
     ports:
       # Evita colisiones con MySQL local del host
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - dbdata:/var/lib/mysql
       - ./scripts:/scripts
